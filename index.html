@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Multiplayer Tetris</title>
+    <!-- CSS wie vorher -->
+</head>
+<body>
+    <div id="lobby">
+        <input type="text" id="nameInput" placeholder="Dein Name">
+        <button onclick="createGame()">Neues Spiel erstellen</button>
+        <div>
+            <input type="text" id="gameIdInput" placeholder="Spiel-ID">
+            <button onclick="joinGame()">Spiel beitreten</button>
+        </div>
+    </div>
+    <div id="game" style="display: none;">
+        <!-- Tetris-Code wie vorher -->
+        <div id="players"></div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        let isHost = false;
+
+        // Lobby Logik
+        function createGame() {
+            const name = document.getElementById('nameInput').value;
+            isHost = true;
+            socket.emit('createGame', name);
+        }
+
+        function joinGame() {
+            const gameId = document.getElementById('gameIdInput').value;
+            const name = document.getElementById('nameInput').value;
+            socket.emit('joinGame', { gameId, name });
+        }
+
+        socket.on('gameCreated', (gameId) => {
+            document.getElementById('lobby').style.display = 'none';
+            document.getElementById('game').style.display = 'block';
+            // Tetris-Initialisierung
+        });
+
+        // Spiel Logik Erweiterungen
+        function addGarbage(lines) {
+            for (let i = 0; i < lines; i++) {
+                board.pop();
+                board.unshift(Array(COLS).fill(8)); // Graue Blöcke
+            }
+        }
+
+        // Modifizierte clearLines Funktion
+        function clearLines() {
+            let linesCleared = 0;
+            // ... vorhandene Logik ...
+            if (linesCleared > 0) {
+                socket.emit('linesCleared', linesCleared);
+            }
+        }
+
+        // Game Over Handler
+        function checkGameOver() {
+            if (gameOver) {
+                socket.emit('playerDead');
+            }
+        }
+
+        // Event Listener
+        socket.on('addGarbage', addGarbage);
+        socket.on('gameWon', (winner) => {
+            alert(`${winner.name} hat gewonnen!`);
+        });
+    </script>
+</body>
+</html>
