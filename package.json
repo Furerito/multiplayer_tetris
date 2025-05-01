@@ -2,5 +2,23 @@
   "dependencies": {
     "express": "^5.1.0",
     "socket.io": "^4.8.1"
-  }
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "name": "multiplayer_tetris",
+  "description": "",
+  "version": "1.0.0",
+  "main": "server.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Furerito/multiplayer_tetris.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Furerito/multiplayer_tetris/issues"
+  },
+  "homepage": "https://github.com/Furerito/multiplayer_tetris#readme"
 }
